@@ -1,0 +1,3 @@
+from handlers.client import register_handler_client
+from handlers.admin import register_handler_admin
+from handlers.admin_news import register_handler_admin_news

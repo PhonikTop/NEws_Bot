@@ -19,16 +19,18 @@ async def start(message: types.Message):
         start_buttons = ["Последние 5 новостей", "Обновить список новостей"]
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(*start_buttons)
-        await bot.send_photo(message.from_user.id, Main_img,
-                             caption="Лента новостей",
-                             reply_markup=keyboard)
+        await bot.send_photo(
+            message.from_user.id,
+            Main_img,
+            caption="Лента новостей",
+            reply_markup=keyboard,
+        )
 
 
 @dp.message_handler(commands="помощь")
 @dp.message_handler(commands="help")
 async def help(message: types.Message):
-    await message.answer("Команды\n"
-                         "/start - показать кнопки меню")
+    await message.answer("Команды\n" "/start - показать кнопки меню")
 
 
 # =======================Inline_button Последние 5 новостей===========================
@@ -36,6 +38,7 @@ async def help(message: types.Message):
 
 async def get_5_all(message: types.Message):
     await message.answer("Выберете источник новостей:", reply_markup=five_news_in_line)
+
 
 @dp.callback_query_handler(text="ria5")
 async def get_5_ria(callback: types.callback_query):
@@ -48,6 +51,7 @@ async def get_5_ria(callback: types.callback_query):
         )
         await callback.message.answer(news)
 
+
 @dp.callback_query_handler(text="ria_tr5")
 async def get_5_ria_tr(callback: types.callback_query):
     with open("dicts_files/rio_Turkey_dict.json") as file:
@@ -58,6 +62,7 @@ async def get_5_ria_tr(callback: types.callback_query):
             f"<b>{v['Title']}\n</b>" f"{v['Time']}\n" f"<a href='{v['Url']}'>Читать</a>"
         )
         await callback.message.answer(news)
+
 
 @dp.callback_query_handler(text="seclab_news5")
 async def get_5_seclab_news(callback: types.callback_query):

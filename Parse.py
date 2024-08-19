@@ -8,6 +8,8 @@ from datetime import datetime
 headers = {
     "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:108.0) Gecko/20100101 Firefox/108.0"
 }
+
+
 # =============================SecurityLabNews=============================
 
 
@@ -42,7 +44,7 @@ def SecurityLab_update():
                 "Title": article_title,
                 "Url": article_url,
                 "Desc": article_desc,
-                "Site": "Секьюрити лаб"
+                "Site": "Секьюрити лаб",
             }
 
             fresh_news[article_id] = {
@@ -62,7 +64,6 @@ def SecurityLab_update():
 
 
 def get_RiaTurkey_update():
-
     url = "https://ria.ru/location_Turkey/"
 
     r = requests.get(url=url, headers=headers)

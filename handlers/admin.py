@@ -11,32 +11,35 @@ from config import channel_id
 from create_bot import bot
 from utils import ms_to_users, ms_to_channel, add_message
 
+
 async def start_menu(message: types.Message):
     if f"{message.from_user.id}" == "ВАЩ ID":
         Admin_menu_img = open("media/Img/Admin_Page.png", "rb")
-        await bot.send_photo(message.from_user.id, Admin_menu_img,
-                             caption="Админ меню:",
-                             reply_markup=admin_start)
+        await bot.send_photo(
+            message.from_user.id,
+            Admin_menu_img,
+            caption="Админ меню:",
+            reply_markup=admin_start,
+        )
     else:
         print("Неправильный айди")
         await message.answer(f"Ваш id: {message.from_user.id}")
 
 
-#КОМАНДЫ==================================================================
+# КОМАНДЫ==================================================================
 async def archive(message: types.Message):
     with open("dicts_files/news_dict.json") as file:
         news_dict = json.load(file)
 
     for k, v in sorted(news_dict.items()):
         news = (
-            f"<b>{v['Title']}\n</b>"
-            f"{v['Time']}\n"
-            f"<a href='{v['Url']}'>Читать</a>"
+            f"<b>{v['Title']}\n</b>" f"{v['Time']}\n" f"<a href='{v['Url']}'>Читать</a>"
         )
 
         await bot.send_message(message.from_user.id, news)
 
     await message.answer("Сообщения закончились")
+
 
 async def news_menu(message: types.Message):
     await message.answer("Выберете источник:", reply_markup=admin_news)
@@ -46,14 +49,17 @@ async def mailing(message: types.Message):
     await message.answer("Здравствуй, админ! Напиши сообщение для твоей рассылки")
     await ms_to_users.text.set()
 
+
 async def get_usr_text(message: types.Message, state: FSMContext):
     users = db.get_users()
 
     text = f"{message.text}"
     await state.update_data(text=text)
-    await message.answer("Вот данные которые ты дал:\n"
-                         "Сообщение:\n" + text + "\n"
-                         "Будет отправлено в рассылку")
+    await message.answer(
+        "Вот данные которые ты дал:\n"
+        "Сообщение:\n" + text + "\n"
+        "Будет отправлено в рассылку"
+    )
 
     for row in users:
         try:
@@ -72,12 +78,15 @@ async def send_channel(message: types.Message):
     await message.answer("Здравствуй, админ! Напиши сообщение для поста в канал")
     await ms_to_channel.text.set()
 
+
 async def get_chnl_text(message: types.Message, state: FSMContext):
     text = f"{message.text}"
     await state.update_data(text=text)
-    await message.answer("Вот данные которые ты дал:\n"
-                         "Сообщение:\n" + text + "\n"
-                         "Будет отправлено в канал")
+    await message.answer(
+        "Вот данные которые ты дал:\n"
+        "Сообщение:\n" + text + "\n"
+        "Будет отправлено в канал"
+    )
     await bot.send_message(channel_id, f"{text}")
     message_for_log = f"Администратор @{message.from_user.username}({message.from_user.id}) в канал сообщение: {text}"
     print(message_for_log)
@@ -85,7 +94,7 @@ async def get_chnl_text(message: types.Message, state: FSMContext):
     await state.finish()
 
 
-#РЕГ ХЕНДЛЕРОВ==================================================================
+# РЕГ ХЕНДЛЕРОВ==================================================================
 def register_handler_admin(dp: Dispatcher):
     dp.register_message_handler(start_menu, commands="admin")
     dp.register_message_handler(news_menu, Text(equals="Отправить новости"))
